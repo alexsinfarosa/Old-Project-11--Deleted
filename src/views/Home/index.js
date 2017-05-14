@@ -54,7 +54,6 @@ export default class Home extends Component {
       isSidebarOpen,
       breakpoints
     } = this.props.store.app;
-    console.log(this.props.store.app.areRequiredFieldsSet);
     return (
       <MatchMediaProvider breakpoints={breakpoints}>
         <Main
@@ -63,7 +62,7 @@ export default class Home extends Component {
           open={isSidebarOpen}
           onSetOpen={d => setIsSidebarOpen(d)}
         >
-          <RightContent />
+          <RightContent mobile={breakpoints.xs} />
         </Main>
       </MatchMediaProvider>
     );

@@ -2,8 +2,12 @@ import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 
+//  reflexbox
 import { Flex, Box } from "reflexbox";
-// import { Table } from "antd";
+
+// styles
+import "styles/table.styl";
+
 import Table from "antd/lib/table";
 import "antd/lib/table/style/css";
 
@@ -13,7 +17,7 @@ const forecastText = date => {
   return (
     <div>
       <div>{date.split("-")[0]}</div>
-      <div style={{ fontSize: ".6rem", color: "red" }}>
+      <div style={{ fontSize: ".5rem", color: "red" }}>
         {date.split("-")[1]}
       </div>
     </div>
@@ -93,22 +97,21 @@ export default class BlueberryMaggot extends Component {
   render() {
     const {
       ACISData,
-      subject,
       station,
       areRequiredFieldsSet,
       isGraph
     } = this.props.store.app;
+    // const { mobile } = this.props;
 
     return (
       <Flex column>
         <Box>
-          <h2>{subject.name} Prediction For {station.name}</h2>
+          <h2>Blueberry Maggot Prediction For {station.name}</h2>
         </Box>
 
         <Flex justify="center">
 
-          <Box mt={3} col={12} lg={12} md={12} sm={12}>
-            <h3>Blueberry Maggot</h3>
+          <Box mt={1} col={12} lg={12} md={12} sm={12}>
 
             <Table
               size="middle"

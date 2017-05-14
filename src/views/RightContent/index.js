@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
-import { MatchMediaProvider } from "mobx-react-matchmedia";
 
 // components
 import Map from "components/Map";
@@ -18,44 +17,40 @@ class RightContent extends Component {
       areRequiredFieldsSet,
       subject,
       isMap,
-      breakpoints,
       toggleSidebar
     } = this.props.store.app;
-
     return (
-      <MatchMediaProvider breakpoints={breakpoints}>
-        <div
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
-        >
-          {!breakpoints.su
-            ? <Header>
-                <TextIcon>
-                  <IconStyled
-                    type="menu-unfold"
-                    onClick={toggleSidebar}
-                    style={{ marginRight: 10 }}
-                  />
-                  <div>Berry Model</div>
-                </TextIcon>
-                <div>NEWA</div>
-              </Header>
-            : <Header>
+      <div
+        style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+      >
+        {this.props.mobile
+          ? <Header>
+              <TextIcon>
+                <IconStyled
+                  type="menu-unfold"
+                  onClick={toggleSidebar}
+                  style={{ marginRight: 10 }}
+                />
                 <div>Berry Model</div>
-                <div>NEWA</div>
-              </Header>}
+              </TextIcon>
+              <div>NEWA</div>
+            </Header>
+          : <Header>
+              <div>Berry Model</div>
+              <div>NEWA</div>
+            </Header>}
 
-          <MainContent>
-            {isMap && <Map />}
-            {areRequiredFieldsSet &&
-              <div>
-                {subject.name === "Strawberries"
-                  ? <Strawberries />
-                  : <BlueberryMaggot />}
-              </div>}
+        <MainContent>
+          {isMap && <Map />}
+          {areRequiredFieldsSet &&
+            <div>
+              {subject.name === "Strawberries"
+                ? <Strawberries {...this.props} />
+                : <BlueberryMaggot {...this.props} />}
+            </div>}
 
-          </MainContent>
-        </div>
-      </MatchMediaProvider>
+        </MainContent>
+      </div>
     );
   }
 }
