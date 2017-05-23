@@ -19,9 +19,9 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.props.store.app.setSubjectFromLocalStorage(
-      JSON.parse(localStorage.getItem("berry")) || {}
-    );
+    // this.props.store.app.setSubjectFromLocalStorage(
+    //   JSON.parse(localStorage.getItem("berry")) || {}
+    // );
     autorun(() => this.runMainFunction());
   }
 

@@ -14,7 +14,7 @@ class Subject extends Component {
     const mobile = this.props.size;
     this.props.store.app.setSubject(value);
     if (areRequiredFieldsSet && mobile) {
-      console.log("inside Subject");
+      // console.log("inside Subject");
       this.props.store.app.setIsSidebarOpen(false);
       return;
     }

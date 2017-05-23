@@ -23,10 +23,10 @@ export default class AppStore {
   @action setIsLoading = d => (this.isLoading = d);
 
   @observable isMap = true;
-  @action setIsMap = d => (this.isMap = d);
+  @action setIsMap = d => (this.isMap = !this.isMap);
 
   @observable isGraph = false;
-  @action setIsGraph = d => (this.isGraph = d);
+  @action setIsGraph = d => (this.isGraph = !this.isGraph);
 
   @observable breakpoints = {
     xs: "(max-width: 767px)",
@@ -49,9 +49,9 @@ export default class AppStore {
     },
     { name: "Blueberries", diseases: ["Blueberrie Maggot"], graph: true }
   ];
-  @observable subject = {};
-  @action resetSubject = () => (this.subject = {});
-  @action setSubjectFromLocalStorage = d => (this.subject = d);
+  @observable subject = JSON.parse(localStorage.getItem("berry")) || {};
+  // @action resetSubject = () => (this.subject = {});
+  // @action setSubjectFromLocalStorage = d => (this.subject = d);
   @action setSubject = d => {
     this.subject = this.subjects.find(subject => subject.name === d);
     localStorage.setItem(`berry`, JSON.stringify(this.subject));
@@ -60,9 +60,9 @@ export default class AppStore {
   // State----------------------------------------------------------------------
   @observable state = JSON.parse(localStorage.getItem("state")) || {};
   @action setState = stateName => {
-    // localStorage.removeItem("station");
+    localStorage.removeItem("state");
     this.station = {};
-    this.state = states.filter(state => state.name === stateName)[0];
+    this.state = states.find(state => state.name === stateName);
     localStorage.setItem("state", JSON.stringify(this.state));
   };
 
@@ -82,6 +82,7 @@ export default class AppStore {
     return this.station;
   }
   @action setStation = stationName => {
+    localStorage.removeItem("station");
     this.station = this.stations.find(station => station.name === stationName);
     localStorage.setItem("station", JSON.stringify(this.station));
   };
@@ -104,6 +105,16 @@ export default class AppStore {
   // ACISData ------------------------------------------------------------------
   @observable ACISData = [];
   @action setACISData = d => (this.ACISData = d);
+
+  @observable cercosporaBeticola = [];
+  @action resetCercospora = () => (this.cercosporaBeticola = []);
+  @action setCercosporaBeticola = d => this.cercosporaBeticola.push(d);
+  @computed get displayPlusButton() {
+    return this.ACISData.filter(e => e.missingDays.length > 0)[0];
+  }
+
+  @observable barColor;
+  @action setBarColor = d => (this.barColor = d);
 
   // Strawberry model
   @observable strawberries = [];

@@ -10,40 +10,47 @@ import Table from "antd/lib/table";
 import "antd/lib/table/style/css";
 
 // styled components
-import { RiskLevel } from "./styles";
+import { Value, Info } from "./styles";
 
 // utils
 import { leafWetnessAndTemps, botrytisModel, anthracnoseModel } from "utils";
 
+// To display the 'forecast text' and style the cell
 const forecastText = date => {
   return (
-    <div>
-      <div>{date.split("-")[0]}</div>
-      <div style={{ fontSize: ".5rem", color: "red" }}>
+    <Flex justify="center" align="center" column>
+      <Value>
+        {date.split("-")[0]}
+      </Value>
+
+      <Info style={{ color: "red" }}>
         {date.split("-")[1]}
-      </div>
-    </div>
+      </Info>
+    </Flex>
   );
 };
 
 const riskLevel = (text, record, i) => {
   // console.log(text, record, i);
   return (
-    <div>
-      <span style={{ color: record.color }}>{text}</span>
-      <RiskLevel style={{ background: record.color }}>
+    <Flex justify="center" align="center" column>
+      <Value mb={1} style={{ color: record.color }}>
+        {text}
+      </Value>
+      <Info col={7} lg={4} md={4} sm={7} style={{ background: record.color }}>
         {record.riskLevel}
-      </RiskLevel>
-    </div>
+      </Info>
+    </Flex>
   );
 };
 
 const columns = [
   {
     title: "Date",
-    className: "table",
+    width: "30%",
     dataIndex: "date",
     key: "date",
+    className: "table",
     render: date => forecastText(date)
   },
   {
@@ -51,6 +58,7 @@ const columns = [
     children: [
       {
         title: "Botrytis",
+        width: "35%",
         className: "table",
         dataIndex: "botrytis.index",
         key: "botrytis",
@@ -58,6 +66,7 @@ const columns = [
       },
       {
         title: "Anthracnose",
+        width: "35%",
         className: "table",
         dataIndex: "anthracnose.index",
         key: "anthracnose",
@@ -122,7 +131,6 @@ export default class Strawberries extends Component {
       }
 
       let date = day.dateTable;
-
       this.props.store.app.setStrawberries({ date, botrytis, anthracnose });
     }
   };
@@ -130,11 +138,19 @@ export default class Strawberries extends Component {
   render() {
     const { ACISData, station, areRequiredFieldsSet } = this.props.store.app;
     const { strawberries } = this.props.store.app;
-    // const { mobile } = this.props;
+    const { mobile } = this.props;
     return (
       <Flex column>
         <Box>
-          <h2>Strawberry Prediction For {station.name}</h2>
+          {!mobile
+            ? <h2>
+                Strawberry Prediction for {" "}
+                <em style={{ color: "#C44645" }}>{station.name}</em>
+              </h2>
+            : <h3>
+                Strawberry Prediction for {" "}
+                <em style={{ color: "#C44645" }}>{station.name}</em>
+              </h3>}
         </Box>
 
         <Flex justify="center">

@@ -125,22 +125,6 @@ export const avgTwoStringNumbers = (a, b) => {
   return Math.round((aNum + bNum) / 2).toString();
 };
 
-// It replaces non consecutive values in data with the average
-// of the left and the right values
-// export const replaceNonConsecutiveMissingValues = data => {
-//   return data.map((val, i) => {
-//     if (i === 0 && val === "M") {
-//       return data[i + 1];
-//     } else if (i === data.length - 1 && val === "M") {
-//       return data[i - 1];
-//     } else if (val === "M" && data[i - 1] !== "M" && data[i + 1] !== "M") {
-//       return avgTwoStringNumbers(data[i - 1], data[i + 1]);
-//     } else {
-//       return val;
-//     }
-//   });
-// };
-
 export const replaceNonConsecutiveMissingValues = data => {
   return data.map(day => {
     return day.map(param => {
@@ -316,7 +300,7 @@ export const anthracnoseModel = data => {
   return (1 / (1 + Math.exp(-i))).toFixed(2);
 };
 
-// This function will shift data from (0, 23) to (12, 24)
+// This function will shift data from (0, 23) to (13, 12)
 export const noonToNoon = data => {
   let results = [];
 
@@ -403,6 +387,26 @@ export const linspaceMissingValues = data => {
   }
 };
 
+import nd from "./nd.json";
+// nd.map(e => console.log(e))
+const ndTp = nd.map(e => e.tp);
+let tp = [];
+while (ndTp.length > 24) {
+  tp.push(ndTp.splice(12, 24));
+}
+const ndRh = nd.map(e => e.rh);
+let rh = [];
+while (ndRh.length > 24) {
+  rh.push(ndRh.splice(12, 24));
+}
+// console.log(rh)
+// const ndRh = nd.map(e => e.rh)
+
+// Returns true if finds more than 3 missing values in array
+// const above3Ms = data => {
+//   return data.filter(e => e === "M").length > 3 ? false : true;
+// };
+
 // Returns the data array (MAIN FUNCTION) ---------------------------------------------------
 export const getData = async (
   protocol,
@@ -458,6 +462,10 @@ export const getData = async (
     for (const [i, day] of results.entries()) {
       results[i]["tpFinal"] = replaceMissingValues(day.tp, day.tpSis);
       results[i]["rhFinal"] = replaceMissingValues(day.rh, day.rhSis);
+
+      // results[i]["tpFinal"] = tp[i];
+      // results[i]["rhFinal"] = rh[i];
+
       results[i]["lwFinal"] = replaceMissingValues(day.lw, day.lwSis);
       results[i]["ptFinal"] = replaceMissingValues(day.pt, day.ptSis);
     }
@@ -508,7 +516,7 @@ export const getData = async (
       startDate,
       endDate
     );
-    forecastData = replaceNonConsecutiveMissingValues(forecastData);
+    // forecastData = replaceNonConsecutiveMissingValues(forecastData);
     forecastData = noonToNoon(forecastData);
 
     // forecastData.map(day => day.map(p => console.log(p)));
@@ -530,24 +538,25 @@ export const getData = async (
       results[i]["rhFinal"] = RHAdjustment(
         replaceMissingValues(day.rhCurrentAndSiter, day.rhForecast)
       );
+      // results[i]["tpFinal"] = tp[i];
+      // results[i]["rhFinal"] = rh[i];
       results[i]["ptFinal"] = replaceMissingValues(
         day.ptCurrentAndSiter,
         day.ptForecast
       );
     }
   }
-
+  // results.slice(0, 5).map(e => console.log(e))
   // Add to the results objects params that might be needed
   const base = 50;
   let cdd = 0;
+  let cumulativeMissingDays = 0;
+  let missingDays = [];
   for (const [i, day] of results.entries()) {
     results[i]["base"] = base;
 
     // date to display on graphs
     results[i]["dateGraph"] = format(day.date, "MMM D");
-
-    // date to display as text
-    results[i]["dateText"] = format(day.date, "MMMM Do");
 
     // date to display in tables
     let dateTable = format(day.date, "MMM D");
@@ -557,36 +566,60 @@ export const getData = async (
     }
     results[i]["dateTable"] = dateTable;
 
-    // average, min and max temperatures
-    const Tavg = average(day.tpFinal);
-    const Tmin = Math.min(...day.tpFinal);
-    const Tmax = Math.max(...day.tpFinal);
-    results[i]["Tavg"] = Tavg;
-    results[i]["Tmin"] = Tmin;
-    results[i]["Tmax"] = Tmax;
+    // Check if there are missing values
+    let tpArrayHasNoMissingValues =
+      day.tpFinal.filter(e => e === "M").length === 0;
+    let rhArrayHasNoMissingValues =
+      day.rhFinal.filter(e => e === "M").length === 0;
 
-    // calculate dd (degree day)
-    const dd = Tavg - base > 0 ? Tavg - base : 0;
-    results[i]["dd"] = dd;
+    // if no missing values
+    if (tpArrayHasNoMissingValues && rhArrayHasNoMissingValues) {
+      let Tmin, Tmax, Tavg;
+      Tmin = Math.min(...day.tpFinal);
+      Tmax = Math.max(...day.tpFinal);
+      Tavg = average(day.tpFinal);
 
-    // calculate cdd (cumulative degree day)
-    cdd += dd;
-    results[i]["cdd"] = cdd;
+      results[i]["Tmin"] = Tmin;
+      results[i]["Tmax"] = Tmax;
+      results[i]["Tavg"] = Tavg;
+      results[i]["missingDays"] = missingDays;
 
-    // returns relative humidity above or equal to 90% (RH >= 90)
-    const rhAboveValues = aboveEqualToValue(day.rhFinal, 90);
-    results[i]["rhAboveValues"] = rhAboveValues;
+      // calculate dd (degree day)
+      const dd = Tavg - base > 0 ? Tavg - base : 0;
+      results[i]["dd"] = dd;
 
-    // Number of hours where relative humidity is equal to or above 90%
-    const hrsRH = rhAboveValues.filter(e => e !== false).length;
-    results[i]["hrsRH"] = hrsRH;
+      // calculate cdd (cumulative degree day)
+      cdd += dd;
+      results[i]["cdd"] = cdd;
 
-    // calculate dicv..
-    let dicv = 0;
-    if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
-      dicv = table[hrsRH.toString()][Tavg.toString()];
+      // returns relative humidity above or equal to 90% (RH >= 90)
+      const rhAboveValues = aboveEqualToValue(day.rhFinal, 90);
+      results[i]["rhAboveValues"] = rhAboveValues;
+
+      // Number of hours where relative humidity is equal to or above 90%
+      const hrsRH = rhAboveValues.filter(e => e !== false).length;
+      results[i]["hrsRH"] = hrsRH;
+
+      // calculate dicv..
+      let dicv = 0;
+      if (Tavg >= 59 && Tavg <= 94 && hrsRH > 0) {
+        dicv = table[hrsRH.toString()][Tavg.toString()];
+      }
+
+      results[i]["dicv"] = dicv;
+      // console.log(day.date, Tavg, hrsRH, Tavg, dicv)
+    } else {
+      missingDays.push(day.date);
+
+      results[i]["Tmin"] = "No data";
+      results[i]["Tmax"] = "No data";
+      results[i]["Tavg"] = "No data";
+      results[i]["missingDays"] = missingDays;
+      results[i]["rhAboveValues"] = "No data";
+      results[i]["hrsRH"] = "No data";
+      results[i]["dicv"] = 0.0001;
     }
-    results[i]["dicv"] = dicv;
   }
+  results.map(e => console.log(e));
   return results;
 };

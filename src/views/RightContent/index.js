@@ -15,9 +15,9 @@ class RightContent extends Component {
   render() {
     const {
       areRequiredFieldsSet,
-      subject,
       isMap,
-      toggleSidebar
+      toggleSidebar,
+      subject
     } = this.props.store.app;
     return (
       <div
@@ -37,18 +37,22 @@ class RightContent extends Component {
             </Header>
           : <Header>
               <div>Berry Model</div>
-              <div>NEWA</div>
+              <div>
+                <div style={{ textAlign: "right" }}>NEWA</div>
+                <div style={{ fontSize: ".7rem", letterSpacing: "1px" }}>
+                  Network for Environment and Weather Applications
+                </div>
+              </div>
             </Header>}
 
         <MainContent>
-          {isMap && <Map />}
+          {isMap && <Map {...this.props} />}
           {areRequiredFieldsSet &&
             <div>
               {subject.name === "Strawberries"
                 ? <Strawberries {...this.props} />
                 : <BlueberryMaggot {...this.props} />}
             </div>}
-
         </MainContent>
       </div>
     );
