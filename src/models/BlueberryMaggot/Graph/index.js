@@ -59,7 +59,7 @@ export default class Graph extends Component {
                 activeDot={{ r: 7 }}
                 type="monotone"
                 dataKey="cdd"
-                stroke="#8884d8"
+                stroke="#C44645"
               />
             </LineChart>
           </ResponsiveContainer>

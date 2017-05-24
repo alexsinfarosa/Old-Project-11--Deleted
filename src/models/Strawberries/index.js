@@ -105,13 +105,13 @@ export default class Strawberries extends Component {
       if (indexBotrytis !== "No Data") {
         if (indexBotrytis < 0.50) {
           botrytis["riskLevel"] = "Low";
-          botrytis["color"] = "#81C784";
+          botrytis["color"] = "#00A854";
         } else if (indexBotrytis >= 0.50 && indexBotrytis < 0.70) {
           botrytis["riskLevel"] = "Moderate";
-          botrytis["color"] = "#FCCE00";
+          botrytis["color"] = "#FFBF00";
         } else {
           botrytis["riskLevel"] = "High";
-          botrytis["color"] = "#f44336";
+          botrytis["color"] = "#F04134";
         }
       }
 
@@ -120,13 +120,13 @@ export default class Strawberries extends Component {
       if (indexAnthracnose !== "No Data") {
         if (indexAnthracnose < 0.50) {
           anthracnose["riskLevel"] = "Low";
-          anthracnose["color"] = "#81C784";
+          anthracnose["color"] = "#00A854";
         } else if (indexAnthracnose >= 0.50 && indexAnthracnose < 0.70) {
           anthracnose["riskLevel"] = "Moderate";
-          anthracnose["color"] = "#FCCE00";
+          anthracnose["color"] = "#FFBF00";
         } else {
           anthracnose["riskLevel"] = "High";
-          anthracnose["color"] = "#f44336";
+          anthracnose["color"] = "#F04134";
         }
       }
 
