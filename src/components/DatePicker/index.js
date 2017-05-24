@@ -29,6 +29,11 @@ class Subject extends Component {
     }
   };
 
+  disabledDate = current => {
+    // Can not select days after today
+    return current.valueOf() > Date.now();
+  };
+
   render() {
     const { endDate } = this.props.store.app;
     return (
@@ -43,6 +48,7 @@ class Subject extends Component {
           value={moment(endDate)}
           format="MMM DD YYYY"
           onChange={this.onChange}
+          disabledDate={this.disabledDate}
         />
       </div>
     );
