@@ -1,26 +1,27 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 // import { Select } from "antd";
-import Select from "antd/lib/select";
-import "antd/lib/select/style/css";
+import Select from 'antd/lib/select';
+import 'antd/lib/select/style/css';
 const Option = Select.Option;
 
 // Utilities
-import { states } from "config/states";
+import { states } from 'config/states';
 
-@inject("store")
+@inject('store')
 @observer
 class State extends Component {
   handleChange = value => {
     this.props.store.app.setState(value);
+    this.props.store.app.setIsMap(true);
   };
   render() {
     const { state } = this.props.store.app;
-    const stateList = states.map(state => (
+    const stateList = states.map(state =>
       <Option key={state.postalCode} value={state.name}>{state.name}</Option>
-    ));
+    );
     return (
-      <div style={{ marginBottom: "2rem" }}>
+      <div style={{ marginBottom: '2rem' }}>
         <label>State:</label>
         <Select
           name="state"
