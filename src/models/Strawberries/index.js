@@ -149,16 +149,16 @@ export default class Strawberries extends Component {
         <Box>
           {!mobile
             ? <h2>
-                <i>Strawberry Prediction</i> for {' '}
-                <em style={{ color: '#C44645' }}>
+                <i>Strawberry</i> prediction for {' '}
+                <span style={{ color: '#C44645' }}>
                   {station.name}, {state.postalCode}
-                </em>
+                </span>
               </h2>
             : <h3>
-                <i>Strawberry Prediction</i> for {' '}
-                <em style={{ color: '#C44645' }}>
+                <i>Strawberry</i> prediction for {' '}
+                <span style={{ color: '#C44645' }}>
                   {station.name}, {state.postalCode}
-                </em>
+                </span>
               </h3>}
         </Box>
 

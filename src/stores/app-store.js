@@ -55,8 +55,7 @@ export default class AppStore {
     { name: 'Blueberries', diseases: ['Blueberrie Maggot'], graph: true }
   ];
   @observable subject = JSON.parse(localStorage.getItem('berry')) || {};
-  // @action resetSubject = () => (this.subject = {});
-  // @action setSubjectFromLocalStorage = d => (this.subject = d);
+  @observable isSubject = Object.keys(this.subject).length !== 0;
   @action
   setSubject = d => {
     this.subject = this.subjects.find(subject => subject.name === d);
@@ -132,7 +131,11 @@ export default class AppStore {
 
   // ACISData ------------------------------------------------------------------
   @observable ACISData = [];
-  @action setACISData = d => (this.ACISData = d);
+  @action
+  setACISData = d => {
+    this.ACISData = d;
+    this.setCSVData();
+  };
 
   @observable cercosporaBeticola = [];
   @action resetCercospora = () => (this.cercosporaBeticola = []);
@@ -148,4 +151,21 @@ export default class AppStore {
   // Strawberry model
   @observable strawberries = [];
   @action setStrawberries = d => this.strawberries.push(d);
+
+  @observable CSVData = [];
+  @action
+  setCSVData() {
+    this.ACISData.forEach(obj => {
+      const picked = (({ date, dd, cdd, Tmin, Tmax, Tavg, base }) => ({
+        date,
+        dd,
+        cdd,
+        Tmin,
+        Tmax,
+        Tavg,
+        base
+      }))(obj);
+      this.CSVData.push(picked);
+    });
+  }
 }

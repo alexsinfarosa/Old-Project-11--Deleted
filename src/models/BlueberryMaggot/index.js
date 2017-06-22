@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import takeRight from 'lodash/takeRight';
+// import { CSVLink } from 'react-csv';
 
 //  reflexbox
 import { Flex, Box } from 'reflexbox';
@@ -9,16 +10,22 @@ import { Flex, Box } from 'reflexbox';
 import 'styles/shared.styl';
 
 // styled components
-import { Value, Info } from './styles';
+import { Value, Info, CSVButton } from './styles';
 
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
+import Button from 'antd/lib/button';
+import 'antd/lib/button/style/css';
 
 import Graph from './Graph';
 
 @inject('store')
 @observer
 export default class BlueberryMaggot extends Component {
+  constructor(props) {
+    super(props);
+    this.props.store.app.setCSVData();
+  }
   render() {
     const {
       ACISData,
@@ -27,7 +34,8 @@ export default class BlueberryMaggot extends Component {
       isGraph,
       displayPlusButton,
       state,
-      isLoading
+      isLoading,
+      CSVData
     } = this.props.store.app;
     const { mobile } = this.props;
 
@@ -181,22 +189,36 @@ export default class BlueberryMaggot extends Component {
     return (
       <div>
         {!isLoading &&
-          <Flex column>
-            <Box>
-              {!mobile
-                ? <h2>
-                    <i>Blueberry Maggot</i> Prediction for {' '}
-                    <span style={{ color: '#C44645' }}>
-                      {station.name}, {state.postalCode}
-                    </span>
-                  </h2>
-                : <h3>
-                    <i>Blueberry Maggot</i> Prediction for {' '}
-                    <span style={{ color: '#C44645' }}>
-                      {station.name}, {state.postalCode}
-                    </span>
-                  </h3>}
-            </Box>
+          <Flex column mt={2}>
+            <Flex justify="space-between" align="center">
+              <Box>
+                {!mobile
+                  ? <h2>
+                      <i>Blueberry Maggot</i> prediction for {' '}
+                      <span style={{ color: '#C44645' }}>
+                        {station.name}, {state.postalCode}
+                      </span>
+                    </h2>
+                  : <h3>
+                      <i>Blueberry Maggot</i> prediction for {' '}
+                      <span style={{ color: '#C44645' }}>
+                        {station.name}, {state.postalCode}
+                      </span>
+                    </h3>}
+              </Box>
+
+              <Box>
+                <Button type="secondary" icon="download">
+                  <CSVButton
+                    data={CSVData.slice()}
+                    filename={'beetModel.csv'}
+                    target="_blank"
+                  >
+                    Download CSV
+                  </CSVButton>
+                </Button>
+              </Box>
+            </Flex>
 
             <Flex justify="center">
               <Box mt={1} col={12} lg={12} md={12} sm={12}>

@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { Box } from "reflexbox";
+import styled from 'styled-components';
+import { Box } from 'reflexbox';
+import { CSVLink } from 'react-csv';
 
 export const Value = styled(Box)`
   font-size: .75rem;
@@ -32,5 +33,12 @@ export const Info = styled(Box)`
   @media (max-width: 319px) {
     font-size: .4rem;
   }
+`;
 
+export const CSVButton = styled(CSVLink)`
+  color: #828282;
+  margin-left: 5px;
+  &:hover {
+    color: #138FE9
+  }
 `;

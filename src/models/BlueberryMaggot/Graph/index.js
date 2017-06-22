@@ -50,7 +50,18 @@ export default class Graph extends Component {
               <YAxis />
               <CartesianGrid stroke="#E9E9E9" strokeDasharray="7 7" />
               <Tooltip />
-              <Legend align="center" verticalAlign="top" height={48} />
+              <Legend
+                align="right"
+                verticalAlign="top"
+                height={48}
+                payload={[
+                  {
+                    value: 'Cumulative degree day',
+                    type: 'line',
+                    color: '#C44645'
+                  }
+                ]}
+              />
               <Line
                 dot={false}
                 activeDot={{ r: 7 }}

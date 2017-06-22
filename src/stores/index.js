@@ -1,4 +1,4 @@
-import AppStore from "./app-store";
+import AppStore from './app-store';
 // import BeetStore from "../../src/models/Beets/beet-store";
 // import BerryStore from "../../src/models/Berries/berry-store";
 

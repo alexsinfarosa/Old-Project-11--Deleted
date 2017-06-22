@@ -20,7 +20,12 @@ class Acknowledgements extends Component {
   render() {
     return (
       <Flex mt={4}>
-        <Button type="default" onClick={() => this.setIsVisible(true)}>
+        <Button
+          size="large"
+          type="default"
+          icon="info-circle-o"
+          onClick={() => this.setIsVisible(true)}
+        >
           Acknowledgments
         </Button>
         <Modal

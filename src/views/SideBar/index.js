@@ -18,7 +18,7 @@ import Acknowledgements from 'components/Acknowledgements';
 import { Flex, Box } from 'reflexbox';
 
 // styled-components
-import { SideBarContent } from './styles';
+import { SideBarContent, RiskLevel } from './styles';
 
 @inject('store')
 @observer
@@ -71,10 +71,32 @@ class SideBar extends Component {
             </Button>
           </Box>}
 
-        <Flex mt={4} mb={4}>
-          <Box style={{ color: '#108EE9' }}>Emergence</Box>
-          <Box ml={1}>(above 913)</Box>
-        </Flex>
+        {subject.name === 'Strawberries' &&
+          <Flex mt={4} mb={2} column>
+            <h4>Risk Levels</h4>
+            <Flex mt={1} mb={1}>
+              <RiskLevel color="#00A854">Low</RiskLevel>
+              <Box ml={1}>Less than 0.5</Box>
+            </Flex>
+            <Flex mt={1} mb={1}>
+              <RiskLevel color="#FFBF00">Moderate</RiskLevel>
+              <Box ml={1}>Between 0.5 and 0.7</Box>
+            </Flex>
+            <Flex mt={1} mb={1}>
+              <RiskLevel color="#F04134">High</RiskLevel>
+              <Box ml={1}>Above 0.7</Box>
+            </Flex>
+          </Flex>}
+
+        {subject.name === 'Blueberries' &&
+          <Flex mt={4} mb={2} column>
+            <h4>Stage</h4>
+            <Flex mt={1} mb={1}>
+              <Box style={{ color: '#138FE9' }}>Emergence</Box>
+              <Box ml={1}>( > 913)</Box>
+            </Flex>
+          </Flex>}
+
         <Acknowledgements />
 
       </SideBarContent>
