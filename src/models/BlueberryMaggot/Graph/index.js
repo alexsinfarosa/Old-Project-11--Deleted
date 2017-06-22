@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import {
   LineChart,
   XAxis,
@@ -9,19 +9,16 @@ import {
   Legend,
   Line,
   ResponsiveContainer
-} from "recharts";
-import CustomLabel from "./CustomLabel";
+} from 'recharts';
+import CustomLabel from './CustomLabel';
 
-import { Flex, Box } from "reflexbox";
+import { Flex, Box } from 'reflexbox';
 
-@inject("store")
+@inject('store')
 @observer
 export default class Graph extends Component {
   render() {
     const { ACISData } = this.props.store.app;
-
-    // Potential bug. Chartjs needs a javascript array
-    const data = ACISData.map(e => e);
 
     // Change the aspect ratio when viewed on different devices
     let aspect;
@@ -42,11 +39,11 @@ export default class Graph extends Component {
           lg={12}
           md={12}
           sm={12}
-          style={{ margin: "0 auto" }}
+          style={{ margin: '0 auto' }}
         >
           <ResponsiveContainer width="100%" aspect={aspect}>
             <LineChart
-              data={data}
+              data={ACISData.slice()}
               margin={{ top: 20, right: 0, left: -25, bottom: 20 }}
             >
               <XAxis dataKey="dateGraph" tick={<CustomLabel />} />

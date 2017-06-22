@@ -23,7 +23,8 @@ export default class AppStore {
   @observable isLoading = false;
   @action setIsLoading = d => (this.isLoading = d);
 
-  @observable isMap = true;
+  @observable
+  isMap = JSON.parse(localStorage.getItem('state')) !== null ? false : true;
   @action setIsMap = d => (this.isMap = d);
   @action toggleIsMap = d => (this.isMap = !this.isMap);
 
