@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import takeRight from 'lodash/takeRight';
 import { autorun } from 'mobx';
 
-import 'styles/table.styl';
+import 'styles/shared.styl';
 import { Flex, Box } from 'reflexbox';
 
 import Table from 'antd/lib/table';

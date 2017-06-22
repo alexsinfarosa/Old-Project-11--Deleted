@@ -6,7 +6,7 @@ import takeRight from 'lodash/takeRight';
 import { Flex, Box } from 'reflexbox';
 
 // styles
-import 'styles/table.styl';
+import 'styles/shared.styl';
 
 // styled components
 import { Value, Info } from './styles';
@@ -202,6 +202,7 @@ export default class BlueberryMaggot extends Component {
               <Box mt={1} col={12} lg={12} md={12} sm={12}>
                 {displayPlusButton
                   ? <Table
+                      bordered
                       size={mobile ? 'small' : 'middle'}
                       columns={columns}
                       rowKey={record => record.dateTable}
@@ -213,6 +214,7 @@ export default class BlueberryMaggot extends Component {
                       expandedRowRender={record => description(record)}
                     />
                   : <Table
+                      bordered
                       size={mobile ? 'small' : 'middle'}
                       columns={columns}
                       rowKey={record => record.dateTable}

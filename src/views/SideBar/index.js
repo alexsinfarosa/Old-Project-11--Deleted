@@ -13,8 +13,9 @@ import Subject from 'components/Subject';
 import State from 'components/State';
 import Station from 'components/Station';
 import DatePicker from 'components/DatePicker';
+import Acknowledgements from 'components/Acknowledgements';
 
-import { Box } from 'reflexbox';
+import { Flex, Box } from 'reflexbox';
 
 // styled-components
 import { SideBarContent } from './styles';
@@ -69,6 +70,13 @@ class SideBar extends Component {
               {isGraph ? 'Hide Graph' : 'Display Graph'}
             </Button>
           </Box>}
+
+        <Flex mt={4} mb={4}>
+          <Box style={{ color: '#108EE9' }}>Emergence</Box>
+          <Box ml={1}>(above 913)</Box>
+        </Flex>
+        <Acknowledgements />
+
       </SideBarContent>
     );
   }
