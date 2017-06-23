@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import takeRight from 'lodash/takeRight';
+import format from 'date-fns/format';
 // import { CSVLink } from 'react-csv';
 
 //  reflexbox
@@ -35,9 +36,16 @@ export default class BlueberryMaggot extends Component {
       displayPlusButton,
       state,
       isLoading,
-      CSVData
+      CSVData,
+      endDate
     } = this.props.store.app;
     const { mobile } = this.props;
+
+    const missingDays = () => {
+      const idx = ACISData.findIndex(o => o.date === endDate);
+      const today = ACISData[idx];
+      if (today) return today.missingDays.length;
+    };
 
     // To display the 'forecast text' and style the cell
     const forecastText = date => {
@@ -147,13 +155,13 @@ export default class BlueberryMaggot extends Component {
         title: 'Degree Days',
         children: [
           {
-            title: 'Daily',
+            title: '50˚F BE',
             className: 'table',
             dataIndex: 'dd',
             key: 'dd'
           },
           {
-            title: 'Cumulative',
+            title: 'Accumulation from Jan 1st',
             className: 'table',
             dataIndex: 'cdd',
             key: 'cdd',
@@ -190,21 +198,52 @@ export default class BlueberryMaggot extends Component {
       <div>
         {!isLoading &&
           <Flex column mt={2}>
-            <Flex justify="space-between" align="center">
+            <Flex>
               <Box>
                 {!mobile
                   ? <h2>
-                      <i>Blueberry Maggot</i> prediction for {' '}
+                      <i>Blueberry Maggot</i> Results for {' '}
                       <span style={{ color: '#C44645' }}>
                         {station.name}, {state.postalCode}
                       </span>
                     </h2>
                   : <h3>
-                      <i>Blueberry Maggot</i> prediction for {' '}
+                      <i>Blueberry Maggot</i> Results for {' '}
                       <span style={{ color: '#C44645' }}>
                         {station.name}, {state.postalCode}
                       </span>
                     </h3>}
+              </Box>
+            </Flex>
+
+            <Flex mt={1} column>
+              <Box>
+                <i>
+                  Blueberry maggot emergence is predicted to occur when
+                  approximately 913 degree days, base 50 F, have accumulated
+                  from January 1st.
+                </i>
+              </Box>
+            </Flex>
+
+            <Flex mt={2} justify="space-between" align="baseline">
+              <Box mt={2}>
+                <h3>
+                  Accumulated degree days (base 50°F) through{' '}
+                  {format(endDate, 'MM/DD/YYYY')}: {station.name},{' '}
+                  {state.postalCode} (
+                  {` ${missingDays()}`} days missing )
+                </h3>
+              </Box>
+
+              <Box>
+                <a
+                  target="_blank"
+                  href={`http://forecast.weather.gov/MapClick.php?textField1=${station.lat}&textField2=${station.lon}`}
+                  type="secondary"
+                >
+                  Forecast Details
+                </a>
               </Box>
 
               <Box>
@@ -247,6 +286,20 @@ export default class BlueberryMaggot extends Component {
                       }
                     />}
               </Box>
+            </Flex>
+            <Flex mt={2}>
+              <i>
+                <em style={{ color: 'black' }}>
+                  Disclaimer: These are theoretical predictions and forecasts.
+                </em>
+                The theoretical models predicting pest development or disease
+                risk
+                use the weather data collected (or forecasted) from the weather
+                station location. These results should not be substituted for
+                actual observations of plant growth stage, pest presence, and
+                disease occurrence determined through scouting or insect
+                pheromone traps.
+              </i>
             </Flex>
             {isGraph && <Graph />}
           </Flex>}

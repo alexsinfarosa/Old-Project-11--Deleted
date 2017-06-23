@@ -88,14 +88,14 @@ class SideBar extends Component {
             </Flex>
           </Flex>}
 
-        {subject.name === 'Blueberries' &&
+        {/* {subject.name === 'Blueberries' &&
           <Flex mt={4} mb={2} column>
             <h4>Stage</h4>
             <Flex mt={1} mb={1}>
               <Box style={{ color: '#138FE9' }}>Emergence</Box>
               <Box ml={1}>( > 913)</Box>
             </Flex>
-          </Flex>}
+          </Flex>} */}
 
         <Acknowledgements />
 
