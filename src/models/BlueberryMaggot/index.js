@@ -211,7 +211,7 @@ export default class BlueberryMaggot extends Component {
                 <Button type="secondary" icon="download">
                   <CSVButton
                     data={CSVData.slice()}
-                    filename={'beetModel.csv'}
+                    filename={'blueberryMaggotModel.csv'}
                     target="_blank"
                   >
                     Download CSV

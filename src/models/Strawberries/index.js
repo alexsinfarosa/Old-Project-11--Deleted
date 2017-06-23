@@ -8,9 +8,11 @@ import { Flex, Box } from 'reflexbox';
 
 import Table from 'antd/lib/table';
 import 'antd/lib/table/style/css';
+import Button from 'antd/lib/button';
+import 'antd/lib/button/style/css';
 
 // styled components
-import { Value, Info } from './styles';
+import { Value, Info, CSVButton } from './styles';
 
 // utils
 import { leafWetnessAndTemps, botrytisModel, anthracnoseModel } from 'utils';
@@ -37,7 +39,7 @@ const riskLevel = (text, record, i) => {
       <Value mb={1} style={{ color: record.color }}>
         {text}
       </Value>
-      <Info col={7} lg={4} md={4} sm={7} style={{ background: record.color }}>
+      <Info col={7} lg={3} md={3} sm={7} style={{ background: record.color }}>
         {record.riskLevel}
       </Info>
     </Flex>
@@ -140,27 +142,43 @@ export default class Strawberries extends Component {
       ACISData,
       station,
       areRequiredFieldsSet,
-      state
+      state,
+      strawberries,
+      strawberriesCSV
     } = this.props.store.app;
-    const { strawberries } = this.props.store.app;
     const { mobile } = this.props;
+
     return (
-      <Flex column>
-        <Box>
-          {!mobile
-            ? <h2>
-                <i>Strawberry</i> prediction for {' '}
-                <span style={{ color: '#C44645' }}>
-                  {station.name}, {state.postalCode}
-                </span>
-              </h2>
-            : <h3>
-                <i>Strawberry</i> prediction for {' '}
-                <span style={{ color: '#C44645' }}>
-                  {station.name}, {state.postalCode}
-                </span>
-              </h3>}
-        </Box>
+      <Flex column mt={2}>
+        <Flex justify="space-between" align="center">
+          <Box>
+            {!mobile
+              ? <h2>
+                  <i>Strawberry</i> prediction for {' '}
+                  <span style={{ color: '#C44645' }}>
+                    {station.name}, {state.postalCode}
+                  </span>
+                </h2>
+              : <h3>
+                  <i>Strawberry</i> prediction for {' '}
+                  <span style={{ color: '#C44645' }}>
+                    {station.name}, {state.postalCode}
+                  </span>
+                </h3>}
+          </Box>
+
+          <Box>
+            <Button type="secondary" icon="download">
+              <CSVButton
+                data={strawberriesCSV.slice()}
+                filename={'strawberryModel.csv'}
+                target="_blank"
+              >
+                Download CSV
+              </CSVButton>
+            </Button>
+          </Box>
+        </Flex>
 
         <Flex justify="center">
           <Box mt={1} col={12} lg={12} md={12} sm={12}>

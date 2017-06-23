@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { inject, observer } from "mobx-react";
-import { autorun } from "mobx";
-import { MatchMediaProvider } from "mobx-react-matchmedia";
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { autorun } from 'mobx';
+import { MatchMediaProvider } from 'mobx-react-matchmedia';
 
 // react-sidebar
-import Main from "react-sidebar";
-import RightContent from "views/RightContent";
-import SideBar from "views/SideBar";
+import Main from 'react-sidebar';
+import RightContent from 'views/RightContent';
+import SideBar from 'views/SideBar';
 
 // utility functions
-import { getData } from "../../utils";
+import { getData } from '../../utils';
 
 // const mql = window.matchMedia(`(min-width: 800px)`);
 
-@inject("store")
+@inject('store')
 @observer
 export default class Home extends Component {
   constructor(props) {
@@ -33,12 +33,14 @@ export default class Home extends Component {
       endDate,
       currentYear,
       startDateYear,
-      areRequiredFieldsSet
+      areRequiredFieldsSet,
+      subject
     } = this.props.store.app;
     if (areRequiredFieldsSet) {
       this.props.store.app.setACISData([]);
       return getData(
         protocol,
+        subject,
         getStation,
         startDate,
         endDate,

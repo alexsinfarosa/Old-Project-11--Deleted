@@ -311,6 +311,54 @@ export const baskervilleEmin = (min, max, base) => {
   }
 };
 
+// This function will shift data from (0, 23) to (13, 12)
+export const noonToNoon = data => {
+  let results = [];
+
+  // get all dates
+  const dates = data.map(day => day[0]);
+
+  // shifting Temperature array
+  const TP = data.map(day => day[1]);
+  const TPFlat = [].concat(...TP);
+  let TPShifted = [];
+  while (TPFlat.length > 24) {
+    TPShifted.push(TPFlat.splice(12, 24));
+  }
+
+  // shifting relative humidity array
+  let RH = data.map(day => day[2]);
+  const RHFlat = [].concat(...RH);
+  let RHShifted = [];
+  while (RHFlat.length > 24) {
+    RHShifted.push(RHFlat.splice(12, 24));
+  }
+
+  // shifting leaf wetness array
+  const LW = data.map(day => day[3]);
+  const LWFlat = [].concat(...LW);
+  let LWShifted = [];
+  while (LWFlat.length > 24) {
+    LWShifted.push(LWFlat.splice(12, 24));
+  }
+
+  // shifting precipitation array
+  const PT = data.map(day => day[4]);
+  const PTFlat = [].concat(...PT);
+  let PTShifted = [];
+  while (PTFlat.length > 24) {
+    PTShifted.push(PTFlat.splice(12, 24));
+  }
+
+  for (const [i, el] of dates.entries()) {
+    results[i] = [el, TPShifted[i], RHShifted[i], LWShifted[i], PTShifted[i]];
+  }
+
+  // Since to shift data we requested one day more from the server, we slice to get rid of
+  // the extra day
+  return results.slice(0, -1);
+};
+
 // Testing ----------------------------------------------------------------------------
 // import nd from './nd.json';
 // // nd.map(e => console.log(e))
@@ -328,6 +376,7 @@ export const baskervilleEmin = (min, max, base) => {
 // Returns the data array (MAIN FUNCTION) ---------------------------------------------------
 export const getData = async (
   protocol,
+  subject,
   station,
   startDate,
   endDate,
@@ -336,9 +385,15 @@ export const getData = async (
 ) => {
   // Cleaning and Adjustments
   let acis = [];
-  acis = await fetchACISData(protocol, station, startDate, endDate);
+  let days = 6;
+  if (subject.name === 'Blueberries') {
+    days = 5;
+  }
+  acis = await fetchACISData(protocol, station, startDate, endDate, days);
   acis = replaceNonConsecutiveMissingValues(acis);
-  // acis = noonToNoon(acis);
+  if (days === 6) {
+    acis = noonToNoon(acis);
+  }
   // acis.slice(0, 3).map(e => e.map(d => console.log(d)));
 
   // currentYear !== startDateYear means it is not this year, hence no forecast
@@ -363,10 +418,13 @@ export const getData = async (
       startDate,
       endDate,
       currentYear,
-      startDateYear
+      startDateYear,
+      days
     );
     sisterStationData = replaceNonConsecutiveMissingValues(sisterStationData);
-    // sisterStationData = noonToNoon(sisterStationData);
+    if (days === 6) {
+      sisterStationData = noonToNoon(sisterStationData);
+    }
 
     // Adding to the 'day' object, sister's data
     for (const [i, day] of sisterStationData.entries()) {
@@ -409,10 +467,13 @@ export const getData = async (
       startDate,
       endDate,
       currentYear,
-      startDateYear
+      startDateYear,
+      days
     );
     sisterStationData = replaceNonConsecutiveMissingValues(sisterStationData);
-    // sisterStationData = noonToNoon(sisterStationData);
+    if (days === 6) {
+      sisterStationData = noonToNoon(sisterStationData);
+    }
 
     // Adding to the 'day' object, sister's data
     for (const [i, day] of sisterStationData.entries()) {
@@ -432,10 +493,13 @@ export const getData = async (
       protocol,
       station,
       startDate,
-      endDate
+      endDate,
+      days
     );
     // forecastData = replaceNonConsecutiveMissingValues(forecastData);
-    // forecastData = noonToNoon(forecastData);
+    if (days === 6) {
+      forecastData = noonToNoon(forecastData);
+    }
 
     // forecastData.map(day => day.map(p => console.log(p)));
 

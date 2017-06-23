@@ -23,12 +23,12 @@ export const fetchAllStations = protocol => {
 };
 
 // Fetch acis data -------------------------------------------------------------
-export const fetchACISData = (protocol, station, startDate, endDate) => {
+export const fetchACISData = (protocol, station, startDate, endDate, days) => {
   const params = {
     sid: `${michiganIdAdjustment(station)} ${station.network}`,
     sdate: startDate,
     // Plus 6 days because we account for the noonToNoon function
-    edate: format(addDays(endDate, 5), 'YYYY-MM-DD'),
+    edate: format(addDays(endDate, days), 'YYYY-MM-DD'),
     elems: [
       // temperature
       networkTemperatureAdjustment(station.network),
@@ -78,14 +78,15 @@ export const fetchSisterStationData = (
   startDate,
   endDate,
   currentYear,
-  startDateYear
+  startDateYear,
+  days
 ) => {
   const [id, network] = idAndNetwork.split(' ');
 
   const params = {
     sid: `${id} ${network}`,
     sdate: startDate,
-    edate: format(addDays(endDate, 5), 'YYYY-MM-DD'),
+    edate: format(addDays(endDate, days), 'YYYY-MM-DD'),
     elems: [
       // temperature
       networkTemperatureAdjustment(station.network),
@@ -113,11 +114,17 @@ export const fetchSisterStationData = (
 };
 
 // Fetch forecast temperature --------------------------------------------------
-export const fetchForecastTemps = (protocol, station, startDate, endDate) => {
+export const fetchForecastTemps = (
+  protocol,
+  station,
+  startDate,
+  endDate,
+  days
+) => {
   return axios
     .get(
       `${protocol}//newa2.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/temp/${startDate}/${format(
-        addDays(endDate, 5),
+        addDays(endDate, days),
         'YYYY-MM-DD'
       )}`
     )
@@ -133,11 +140,17 @@ export const fetchForecastTemps = (protocol, station, startDate, endDate) => {
 };
 
 // Fetch forecast relative humidity --------------------------------------------
-export const fetchForecastRH = (protocol, station, startDate, endDate) => {
+export const fetchForecastRH = (
+  protocol,
+  station,
+  startDate,
+  endDate,
+  days
+) => {
   return axios
     .get(
       `${protocol}//newa2.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/rhum/${startDate}/${format(
-        addDays(endDate, 5),
+        addDays(endDate, days),
         'YYYY-MM-DD'
       )}`
     )
@@ -153,11 +166,17 @@ export const fetchForecastRH = (protocol, station, startDate, endDate) => {
 };
 
 // Fetch forecast relative humidity --------------------------------------------
-export const fetchPrecipitation = (protocol, station, startDate, endDate) => {
+export const fetchPrecipitation = (
+  protocol,
+  station,
+  startDate,
+  endDate,
+  days
+) => {
   return axios
     .get(
       `${protocol}//newa2.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/qpf/${startDate}/${format(
-        addDays(endDate, 5),
+        addDays(endDate, days),
         'YYYY-MM-DD'
       )}`
     )
@@ -173,12 +192,18 @@ export const fetchPrecipitation = (protocol, station, startDate, endDate) => {
 };
 
 // Fetch forecast data ---------------------------------------------------------
-export const fetchForecastData = (protocol, station, startDate, endDate) => {
+export const fetchForecastData = (
+  protocol,
+  station,
+  startDate,
+  endDate,
+  days
+) => {
   return axios
     .all([
-      fetchForecastTemps(protocol, station, startDate, endDate),
-      fetchForecastRH(protocol, station, startDate, endDate),
-      fetchPrecipitation(protocol, station, startDate, endDate)
+      fetchForecastTemps(protocol, station, startDate, endDate, days),
+      fetchForecastRH(protocol, station, startDate, endDate, days),
+      fetchPrecipitation(protocol, station, startDate, endDate, days)
     ])
     .then(res => {
       const dates = res[0].map(day => day[0]);

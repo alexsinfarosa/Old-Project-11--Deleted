@@ -17,6 +17,11 @@ export const Value = styled(Box)`
 
 `;
 export const Info = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .65rem;
+  height: 20px;
   color: white;
   border-radius: 5px;
   letter-spacing: 1px;
@@ -33,6 +38,7 @@ export const Info = styled(Box)`
   @media (max-width: 319px) {
     font-size: .4rem;
   }
+
 `;
 
 export const CSVButton = styled(CSVLink)`

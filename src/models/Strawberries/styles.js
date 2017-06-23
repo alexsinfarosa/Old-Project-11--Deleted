@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { Box } from "reflexbox";
+import styled from 'styled-components';
+import { Box } from 'reflexbox';
+import { CSVLink } from 'react-csv';
 
 export const Value = styled(Box)`
   font-size: .75rem;
@@ -16,6 +17,11 @@ export const Value = styled(Box)`
 
 `;
 export const Info = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .65rem;
+  height: 20px;
   color: white;
   border-radius: 5px;
   letter-spacing: 1px;
@@ -33,4 +39,12 @@ export const Info = styled(Box)`
     font-size: .4rem;
   }
 
+`;
+
+export const CSVButton = styled(CSVLink)`
+  color: #828282;
+  margin-left: 5px;
+  &:hover {
+    color: #138FE9
+  }
 `;
