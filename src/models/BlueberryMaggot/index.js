@@ -55,7 +55,7 @@ export default class BlueberryMaggot extends Component {
             {date.split('-')[0]}
           </Value>
 
-          <Info style={{ color: 'red' }}>
+          <Info style={{ color: '#333' }}>
             {date.split('-')[1]}
           </Info>
         </Flex>
@@ -152,10 +152,10 @@ export default class BlueberryMaggot extends Component {
         render: date => forecastText(date)
       },
       {
-        title: 'Degree Days',
+        title: 'Degree Days (base 50˚F BE)',
         children: [
           {
-            title: '50˚F BE',
+            title: 'Daily',
             className: 'table',
             dataIndex: 'dd',
             key: 'dd'
@@ -197,7 +197,7 @@ export default class BlueberryMaggot extends Component {
     return (
       <div>
         {!isLoading &&
-          <Flex column mt={2}>
+          <Flex column mt={2} mb={2}>
             <Flex>
               <Box>
                 {!mobile
@@ -218,7 +218,7 @@ export default class BlueberryMaggot extends Component {
 
             <Flex mt={1} column>
               <Box>
-                <i>
+                <i style={{ fontSize: '14px' }}>
                   Blueberry maggot emergence is predicted to occur when
                   approximately 913 degree days, base 50 F, have accumulated
                   from January 1st.
@@ -226,8 +226,8 @@ export default class BlueberryMaggot extends Component {
               </Box>
             </Flex>
 
-            <Flex mt={2} justify="space-between" align="baseline">
-              <Box mt={2}>
+            <Flex justify="space-between" align="baseline">
+              <Box>
                 <h3>
                   Accumulated degree days (base 50°F) through{' '}
                   {format(endDate, 'MM/DD/YYYY')}: {station.name},{' '}
@@ -260,7 +260,7 @@ export default class BlueberryMaggot extends Component {
             </Flex>
 
             <Flex justify="center">
-              <Box mt={1} col={12} lg={12} md={12} sm={12}>
+              <Box mt={1} col={12} lg={6} md={6} sm={12}>
                 {displayPlusButton
                   ? <Table
                       bordered
