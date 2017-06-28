@@ -59,16 +59,12 @@ export default class BlueberryMaggot extends Component {
 
     const stage = () => {
       if (todayCDD()) {
-        console.log(todayCDD());
-        console.log([bmModel[1]]);
         if (todayCDD() <= 613) return [bmModel[1]];
         if (todayCDD() > 613 && todayCDD() <= 863) return [bmModel[2]];
         if (todayCDD() > 863 && todayCDD() <= 963) return [bmModel[3]];
         if (todayCDD() > 964) return [bmModel[4]];
       }
     };
-
-    console.log(stage());
 
     // To display the 'forecast text' and style the cell
     const forecastText = date => {
