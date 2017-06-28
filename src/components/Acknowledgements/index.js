@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
-import { observable, action } from 'mobx';
-import { Flex } from 'reflexbox';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
+import { observable, action } from "mobx";
+import { Flex } from "reflexbox";
 
-import 'styles/shared.styl';
+import "styles/shared.styl";
 
-import Modal from 'antd/lib/modal';
-import 'antd/lib/modal/style/css';
+import Modal from "antd/lib/modal";
+import "antd/lib/modal/style/css";
 
-import Button from 'antd/lib/button';
-import 'antd/lib/button/style/css';
+import Button from "antd/lib/button";
+import "antd/lib/button/style/css";
 
-@inject('store')
+@inject("store")
 @observer
 class Acknowledgements extends Component {
   @observable isVisible = false;
@@ -37,23 +37,23 @@ class Acknowledgements extends Component {
         >
           <ul>
             <li>
-              Northeast Regional Climate Center -{' '}
-              <a
-                onClick={() => this.setIsVisible(false)}
-                href="http://www.nrcc.cornell.edu/"
-                target="_blank"
-              >
-                NRCC
-              </a>
-            </li>
-            <li>
-              New York State Integrated Pest Management -{' '}
+              New York State Integrated Pest Management -{" "}
               <a
                 onClick={() => this.setIsVisible(false)}
                 href="https://nysipm.cornell.edu/"
                 target="_blank"
               >
                 NYSIPM
+              </a>
+            </li>
+            <li>
+              Northeast Regional Climate Center -{" "}
+              <a
+                onClick={() => this.setIsVisible(false)}
+                href="http://www.nrcc.cornell.edu/"
+                target="_blank"
+              >
+                NRCC
               </a>
             </li>
           </ul>

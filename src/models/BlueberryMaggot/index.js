@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 import format from "date-fns/format";
 import isAfter from "date-fns/is_after";
-// import isToday from "date-fns/is_today";
+import isToday from "date-fns/is_today";
 // import { CSVLink } from 'react-csv';
 
 //  reflexbox
@@ -40,7 +40,8 @@ export default class BlueberryMaggot extends Component {
       isLoading,
       CSVData,
       endDate,
-      currentYear
+      currentYear,
+      bmModel
     } = this.props.store.app;
     const { mobile } = this.props;
 
@@ -56,11 +57,25 @@ export default class BlueberryMaggot extends Component {
       if (today) return today.cdd;
     };
 
+    const stage = () => {
+      if (todayCDD()) {
+        console.log(todayCDD());
+        console.log([bmModel[1]]);
+        if (todayCDD() <= 613) return [bmModel[1]];
+        if (todayCDD() > 613 && todayCDD() <= 863) return [bmModel[2]];
+        if (todayCDD() > 863 && todayCDD() <= 963) return [bmModel[3]];
+        if (todayCDD() > 964) return [bmModel[4]];
+      }
+    };
+
+    console.log(stage());
+
     // To display the 'forecast text' and style the cell
     const forecastText = date => {
       return (
         <Flex justify="center" align="center" column>
-          <Value>{format(date, "MMM D")}</Value>
+          {isToday(date, endDate) && <Value>Today</Value>}
+          {!isToday(date, endDate) && <Value>{format(date, "MMM D")}</Value>}
 
           {isAfter(date, endDate) &&
             <Info style={{ color: "#595959" }}>
@@ -161,7 +176,7 @@ export default class BlueberryMaggot extends Component {
             key: "dd"
           },
           {
-            title: "Accumulation from Jan 1st",
+            title: "Accumulation from January 1st",
             className: "table",
             dataIndex: "cdd",
             key: "cdd",
@@ -194,6 +209,21 @@ export default class BlueberryMaggot extends Component {
       }
     ];
 
+    const pest = [
+      {
+        title: "Pest Status",
+        className: "table",
+        dataIndex: "status",
+        key: "status"
+      },
+      {
+        title: "Pest Management",
+        className: "table",
+        dataIndex: "management",
+        key: "management"
+      }
+    ];
+
     return (
       <div>
         {!isLoading &&
@@ -220,13 +250,13 @@ export default class BlueberryMaggot extends Component {
               <Box>
                 <i style={{ fontSize: "14px" }}>
                   Blueberry maggot emergence is predicted to occur when
-                  approximately 913 degree days, base 50 F, have accumulated
+                  approximately 913 degree days, base 50 ˚F, have accumulated
                   from January 1st.
                 </i>
               </Box>
             </Flex>
 
-            <Flex mt={1} justify="space-between" align="baseline">
+            <Flex mt={1}>
               <Box>
                 <h3>
                   Accumulated degree days (base 50°F) from 01/01/{currentYear}
@@ -235,31 +265,9 @@ export default class BlueberryMaggot extends Component {
                   <small> ({` ${missingDays()}`} days missing )</small>
                 </h3>
               </Box>
-
-              {/* <Box>
-                <a
-                  target="_blank"
-                  href={`http://forecast.weather.gov/MapClick.php?textField1=${station.lat}&textField2=${station.lon}`}
-                  type="secondary"
-                >
-                  Forecast Details
-                </a>
-              </Box> */}
-
-              {/* <Box>
-                <Button type="secondary" icon="download">
-                  <CSVButton
-                    data={CSVData.slice()}
-                    filename={"blueberryMaggotModel.csv"}
-                    target="_blank"
-                  >
-                    Download CSV
-                  </CSVButton>
-                </Button>
-              </Box> */}
             </Flex>
 
-            <Flex justify="center">
+            <Flex justify="center" column align="center">
               <Box mt={1} col={12} lg={8} md={8} sm={12}>
                 {displayPlusButton
                   ? <Table
@@ -286,7 +294,48 @@ export default class BlueberryMaggot extends Component {
                       }
                     />}
               </Box>
+
+              <Box mt={2} col={12} lg={8} md={8} sm={12}>
+                <Table
+                  bordered
+                  size={mobile ? "small" : "middle"}
+                  columns={pest}
+                  rowKey={record => record}
+                  loading={ACISData.length === 0}
+                  pagination={false}
+                  dataSource={areRequiredFieldsSet ? stage() : null}
+                />
+              </Box>
             </Flex>
+
+            <Flex mt={2} justify="center" align="baseline">
+              {/* <Box style={{ background: "pink" }}> */}
+
+              <Box>
+                <a
+                  target="_blank"
+                  href={`http://forecast.weather.gov/MapClick.php?textField1=${station.lat}&textField2=${station.lon}`}
+                  type="secondary"
+                >
+                  Forecast Details
+                </a>
+              </Box>
+
+              <Box ml={2}>
+                <Button type="secondary" icon="download">
+                  <CSVButton
+                    data={CSVData.slice()}
+                    filename={"blueberryMaggotModel.csv"}
+                    target="_blank"
+                  >
+                    Download CSV
+                  </CSVButton>
+                </Button>
+              </Box>
+
+              {/* </Box> */}
+            </Flex>
+
             <Flex mt={2}>
               <i>
                 <em style={{ color: "black" }}>

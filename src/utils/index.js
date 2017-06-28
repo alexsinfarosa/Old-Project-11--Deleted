@@ -1,6 +1,6 @@
-import format from 'date-fns/format';
-import addDays from 'date-fns/add_days';
-import isAfter from 'date-fns/is_after';
+import format from "date-fns/format";
+import addDays from "date-fns/add_days";
+import isAfter from "date-fns/is_after";
 
 // table for the beet model
 // import { table } from "config/table";
@@ -11,7 +11,7 @@ import {
   getSisterStationIdAndNetwork,
   fetchSisterStationData,
   fetchForecastData
-} from 'utils/api';
+} from "utils/api";
 
 // PRE FETCHING ---------------------------------------------------------
 export const matchIconsToStations = (protocol, stations, state) => {
@@ -25,29 +25,29 @@ export const matchIconsToStations = (protocol, stations, state) => {
 
   stations.forEach(station => {
     if (
-      station.network === 'newa' ||
-      station.network === 'njwx' ||
-      station.network === 'miwx' ||
-      ((station.network === 'cu_log' || station.network === 'culog') &&
-        station.state !== 'NY')
+      station.network === "newa" ||
+      station.network === "njwx" ||
+      station.network === "miwx" ||
+      ((station.network === "cu_log" || station.network === "culog") &&
+        station.state !== "NY")
     ) {
       const newObj = station;
-      station.state === state.postalCode || state.postalCode === 'ALL'
-        ? (newObj['icon'] = newa)
-        : (newObj['icon'] = newaGray);
+      station.state === state.postalCode || state.postalCode === "ALL"
+        ? (newObj["icon"] = newa)
+        : (newObj["icon"] = newaGray);
       arr.push(newObj);
-    } else if (station.network === 'cu_log' || station.network === 'culog') {
+    } else if (station.network === "cu_log" || station.network === "culog") {
       const newObj = station;
-      station.state === state.postalCode || state.postalCode === 'ALL'
-        ? (newObj['icon'] = culog)
-        : (newObj['icon'] = culogGray);
-      newObj['icon'] = culog;
+      station.state === state.postalCode || state.postalCode === "ALL"
+        ? (newObj["icon"] = culog)
+        : (newObj["icon"] = culogGray);
+      newObj["icon"] = culog;
       arr.push(newObj);
-    } else if (station.network === 'icao') {
+    } else if (station.network === "icao") {
       const newObj = station;
-      station.state === state.postalCode || state.postalCode === 'ALL'
-        ? (newObj['icon'] = airport)
-        : (newObj['icon'] = airportGray);
+      station.state === state.postalCode || state.postalCode === "ALL"
+        ? (newObj["icon"] = airport)
+        : (newObj["icon"] = airportGray);
       arr.push(newObj);
     }
   });
@@ -58,26 +58,26 @@ export const matchIconsToStations = (protocol, stations, state) => {
 // Handling Temperature parameter and Michigan network id adjustment
 export const networkTemperatureAdjustment = network => {
   // Handling different temperature parameter for each network
-  if (network === 'newa' || network === 'icao' || network === 'njwx') {
-    return '23';
+  if (network === "newa" || network === "icao" || network === "njwx") {
+    return "23";
   } else if (
-    network === 'miwx' ||
-    (network === 'cu_log' || network === 'culog')
+    network === "miwx" ||
+    (network === "cu_log" || network === "culog")
   ) {
-    return '126';
+    return "126";
   }
 };
 
 // Handling Relative Humidity Adjustment
 export const networkHumidityAdjustment = network =>
-  network === 'miwx' ? '143' : '24';
+  network === "miwx" ? "143" : "24";
 
 // Handling Michigan state ID adjustment
 export const michiganIdAdjustment = station => {
   if (
-    station.state === 'MI' &&
-    station.network === 'miwx' &&
-    station.id.slice(0, 3) === 'ew_'
+    station.state === "MI" &&
+    station.network === "miwx" &&
+    station.id.slice(0, 3) === "ew_"
   ) {
     // example: ew_ITH
     return station.id.slice(3, 6);
@@ -97,19 +97,19 @@ export const allStations = (
 
   // building the station object with the things I might need
   for (const station of stationsWithIcons) {
-    station['sid'] = `${station.name} ${station.network}`;
-    station['sdate'] = startDate;
-    station['edate'] = format(addDays(endDate, 6), 'YYYY-MM-DD');
-    station['id-adj'] = michiganIdAdjustment(station);
-    station['elems'] = [
+    station["sid"] = `${station.name} ${station.network}`;
+    station["sdate"] = startDate;
+    station["edate"] = format(addDays(endDate, 6), "YYYY-MM-DD");
+    station["id-adj"] = michiganIdAdjustment(station);
+    station["elems"] = [
       // temperature
       networkTemperatureAdjustment(station.network),
       // relative humidity
       networkHumidityAdjustment(station.network),
       // leaf wetness
-      '118',
+      "118",
       // precipitation
-      '5'
+      "5"
     ];
   }
   // console.log(stationsWithIcons);
@@ -130,14 +130,14 @@ export const replaceNonConsecutiveMissingValues = data => {
     return day.map(param => {
       if (Array.isArray(param)) {
         return param.map((e, i) => {
-          if (i === 0 && e === 'M') {
+          if (i === 0 && e === "M") {
             return param[i + 1];
-          } else if (i === param.length - 1 && e === 'M') {
+          } else if (i === param.length - 1 && e === "M") {
             return param[i - 1];
           } else if (
-            e === 'M' &&
-            param[i - 1] !== 'M' &&
-            param[i + 1] !== 'M'
+            e === "M" &&
+            param[i - 1] !== "M" &&
+            param[i + 1] !== "M"
           ) {
             return avgTwoStringNumbers(param[i - 1], param[i + 1]);
           } else {
@@ -159,7 +159,7 @@ export const replaceNonConsecutiveMissingValues = data => {
 // Replaces current station (cStation) missing values with compared station
 export const replaceMissingValues = (cStation, sStation) => {
   return cStation.map((e, i) => {
-    if (e === 'M' && sStation[i] !== 'M') {
+    if (e === "M" && sStation[i] !== "M") {
       return sStation[i].toString();
     }
     return e.toString();
@@ -170,7 +170,7 @@ export const replaceMissingValues = (cStation, sStation) => {
 // The new values are calculated according to the equation below.
 export const RHAdjustment = arr => {
   return arr.map(e => {
-    if (e !== 'M') {
+    if (e !== "M") {
       return Math.round(parseFloat(e) / (0.0047 * parseFloat(e) + 0.53));
     } else {
       return e;
@@ -236,7 +236,7 @@ export const leafWetnessAndTemps = (day, currentYear, startDateYear) => {
   // console.log(transposed);
   let indices = transposed.map((e, i) => (e !== undefined ? i : e));
   // console.log(indices);
-  indices = indices.filter(e => typeof e === 'number');
+  indices = indices.filter(e => typeof e === "number");
   // console.log(indices);
   let pairs = [];
   for (const [i, e] of indices.entries()) {
@@ -386,7 +386,7 @@ export const getData = async (
   // Cleaning and Adjustments
   let acis = [];
   let days = 6;
-  if (subject.name === 'Blueberries') {
+  if (subject.name === "Blueberry Maggot") {
     days = 5;
   }
   acis = await fetchACISData(protocol, station, startDate, endDate, days);
@@ -428,22 +428,22 @@ export const getData = async (
 
     // Adding to the 'day' object, sister's data
     for (const [i, day] of sisterStationData.entries()) {
-      results[i]['tpSis'] = day[1];
-      results[i]['rhSis'] = day[2];
-      results[i]['lwSis'] = day[3];
-      results[i]['ptSis'] = day[4];
+      results[i]["tpSis"] = day[1];
+      results[i]["rhSis"] = day[2];
+      results[i]["lwSis"] = day[3];
+      results[i]["ptSis"] = day[4];
     }
 
     // replacing missing values with sister station
     for (const [i, day] of results.entries()) {
-      results[i]['tpFinal'] = replaceMissingValues(day.tp, day.tpSis);
-      results[i]['rhFinal'] = replaceMissingValues(day.rh, day.rhSis);
+      results[i]["tpFinal"] = replaceMissingValues(day.tp, day.tpSis);
+      results[i]["rhFinal"] = replaceMissingValues(day.rh, day.rhSis);
 
       // results[i]["tpFinal"] = tp[i];
       // results[i]["rhFinal"] = rh[i];
 
-      results[i]['lwFinal'] = replaceMissingValues(day.lw, day.lwSis);
-      results[i]['ptFinal'] = replaceMissingValues(day.pt, day.ptSis);
+      results[i]["lwFinal"] = replaceMissingValues(day.lw, day.lwSis);
+      results[i]["ptFinal"] = replaceMissingValues(day.pt, day.ptSis);
     }
     // console.log("We are in past year");
     // results.map(e => console.log(e.date, e.tp, e.tpSis, e.tpFinal));
@@ -477,16 +477,16 @@ export const getData = async (
 
     // Adding to the 'day' object, sister's data
     for (const [i, day] of sisterStationData.entries()) {
-      results[i]['tpSis'] = day[1];
-      results[i]['rhSis'] = day[2];
-      results[i]['ptSis'] = day[4];
+      results[i]["tpSis"] = day[1];
+      results[i]["rhSis"] = day[2];
+      results[i]["ptSis"] = day[4];
     }
 
     // replacing missing values with sister station
     for (const [i, day] of results.entries()) {
-      results[i]['tpCurrentAndSiter'] = replaceMissingValues(day.tp, day.tpSis);
-      results[i]['rhCurrentAndSiter'] = replaceMissingValues(day.rh, day.rhSis);
-      results[i]['ptCurrentAndSiter'] = replaceMissingValues(day.pt, day.ptSis);
+      results[i]["tpCurrentAndSiter"] = replaceMissingValues(day.tp, day.tpSis);
+      results[i]["rhCurrentAndSiter"] = replaceMissingValues(day.rh, day.rhSis);
+      results[i]["ptCurrentAndSiter"] = replaceMissingValues(day.pt, day.ptSis);
     }
     // fetching forecast data
     let forecastData = await fetchForecastData(
@@ -505,24 +505,24 @@ export const getData = async (
 
     // Adding to the 'day' object, forecast data
     for (const [i, day] of forecastData.entries()) {
-      results[i]['tpForecast'] = day[1];
-      results[i]['rhForecast'] = day[2];
-      results[i]['ptForecast'] = day[3];
+      results[i]["tpForecast"] = day[1];
+      results[i]["rhForecast"] = day[2];
+      results[i]["ptForecast"] = day[3];
     }
 
     // replacing tpDiff values with forecast station temperatures (tpf)
     for (const [i, day] of results.entries()) {
-      results[i]['tpFinal'] = replaceMissingValues(
+      results[i]["tpFinal"] = replaceMissingValues(
         day.tpCurrentAndSiter,
         day.tpForecast
       );
       // Forcast data needs to have relative humidity array adjusted
-      results[i]['rhFinal'] = RHAdjustment(
+      results[i]["rhFinal"] = RHAdjustment(
         replaceMissingValues(day.rhCurrentAndSiter, day.rhForecast)
       );
       // results[i]["tpFinal"] = tp[i];
       // results[i]["rhFinal"] = rh[i];
-      results[i]['ptFinal'] = replaceMissingValues(
+      results[i]["ptFinal"] = replaceMissingValues(
         day.ptCurrentAndSiter,
         day.ptForecast
       );
@@ -535,31 +535,31 @@ export const getData = async (
   let cumulativeMissingDays = 0;
   let description = [];
   for (const [i, day] of results.entries()) {
-    results[i]['base'] = base;
+    results[i]["base"] = base;
 
     // date to display on graphs
-    results[i]['dateGraph'] = format(day.date, 'MMM D');
+    results[i]["dateGraph"] = format(day.date, "MMM D");
 
     // date to display as text
-    results[i]['dateText'] = format(day.date, 'MMMM Do');
+    results[i]["dateText"] = format(day.date, "MMMM Do");
 
     // date to display in tables
-    let dateTable = format(day.date, 'MMM D');
+    let dateTable = format(day.date, "MMM D");
     const today = new Date();
     if (isAfter(day.date, today)) {
       dateTable = `${dateTable} - Forecast`;
     }
-    results[i]['dateTable'] = dateTable;
+    results[i]["dateTable"] = dateTable;
 
     // Return true if arrays do not contain missing values
     // const isRhClean = day.rhFinal.filter(e => e === "M").length === 0;
-    const isTpClean = day.tpFinal.filter(e => e === 'M').length === 0;
+    const isTpClean = day.tpFinal.filter(e => e === "M").length === 0;
 
     // Description
     if (!isTpClean) {
       description.push(day.dateText);
     }
-    results[i]['missingDays'] = description;
+    results[i]["missingDays"] = description;
 
     if (isTpClean) {
       let Tmin, Tmax, Tavg;
@@ -569,29 +569,29 @@ export const getData = async (
       Tavg = Math.round((Tmin + Tmax) / 2);
 
       cumulativeMissingDays += 0;
-      results[i]['Tmin'] = Tmin;
-      results[i]['Tmax'] = Tmax;
-      results[i]['Tavg'] = Tavg;
-      results[i]['missingDay'] = 0;
-      results[i]['cumulativeMissingDays'] = cumulativeMissingDays;
+      results[i]["Tmin"] = Tmin;
+      results[i]["Tmax"] = Tmax;
+      results[i]["Tavg"] = Tavg;
+      results[i]["missingDay"] = 0;
+      results[i]["cumulativeMissingDays"] = cumulativeMissingDays;
 
       // calculate dd (degree day)
       // const dd = Tavg - base > 0 ? Tavg - base : 0;
       const dd = Math.round(baskervilleEmin(Tmin, Tmax, base));
-      results[i]['dd'] = dd;
+      results[i]["dd"] = dd;
 
       // calculate cdd (cumulative degree day)
       cdd += dd;
-      results[i]['cdd'] = cdd;
+      results[i]["cdd"] = cdd;
     } else {
       cumulativeMissingDays += 1;
-      results[i]['Tmin'] = 'No data';
-      results[i]['Tmax'] = 'No data';
-      results[i]['Tavg'] = 'No data';
-      results[i]['dd'] = 'No data';
-      results[i]['cdd'] = 'No data';
-      results[i]['missingDay'] = 1;
-      results[i]['cumulativeMissingDays'] = cumulativeMissingDays;
+      results[i]["Tmin"] = "No data";
+      results[i]["Tmax"] = "No data";
+      results[i]["Tavg"] = "No data";
+      results[i]["dd"] = "No data";
+      results[i]["cdd"] = "No data";
+      results[i]["missingDay"] = 1;
+      results[i]["cumulativeMissingDays"] = cumulativeMissingDays;
     }
   }
   // results.map(e => console.log(e));
