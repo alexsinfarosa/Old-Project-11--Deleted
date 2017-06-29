@@ -19,6 +19,8 @@ import Table from "antd/lib/table";
 import "antd/lib/table/style/css";
 import Button from "antd/lib/button";
 import "antd/lib/button/style/css";
+import Spin from "antd/lib/spin";
+import "antd/lib/spin/style/css";
 
 import Graph from "./Graph";
 
@@ -62,7 +64,6 @@ export default class BlueberryMaggot extends Component {
       const year = parseInt(currentYear, 10) + 1;
       const sDate = `${currentYear}-10-01`;
       const eDate = `${year}-02-28`;
-      console.log(sDate, eDate);
       if (isWithinRange(endDate, sDate, eDate)) {
         return [bmModel[0]];
       } else {
@@ -259,14 +260,16 @@ export default class BlueberryMaggot extends Component {
             </Flex>
 
             <Flex mt={1} justify="center">
-              <Box>
-                <h3>
-                  Accumulated degree days (base 50°F) from 01/01/{currentYear}
-                  {" "}through{" "}
-                  {format(endDate, "MM/DD/YYYY")}: {todayCDD()}
-                  <small> ({` ${missingDays()}`} days missing )</small>
-                </h3>
-              </Box>
+              {!isLoading
+                ? <Box>
+                    <h3>
+                      Accumulated degree days (base 50°F) from 01/01/{currentYear}
+                      {" "}through{" "}
+                      {format(endDate, "MM/DD/YYYY")}: {todayCDD()}
+                      <small> ({` ${missingDays()}`} days missing )</small>
+                    </h3>
+                  </Box>
+                : <Spin />}
             </Flex>
 
             <Flex justify="center" column align="center">

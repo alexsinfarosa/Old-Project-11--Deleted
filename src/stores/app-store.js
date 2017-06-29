@@ -58,7 +58,12 @@ export default class AppStore {
     },
     { name: "Blueberry Maggot", diseases: ["Blueberrie Maggot"], graph: true }
   ];
-  @observable subject = JSON.parse(localStorage.getItem("berry")) || {};
+  @observable
+  subject = JSON.parse(localStorage.getItem("berry")) || {
+    name: "Blueberry Maggot",
+    diseases: ["Blueberrie Maggot"],
+    graph: true
+  };
   @computed
   get isSubject() {
     return Object.keys(this.subject).length !== 0;
@@ -120,12 +125,11 @@ export default class AppStore {
 
   // Dates----------------------------------------------------------------------
   @observable currentYear = new Date().getFullYear().toString();
-  @observable
-  endDate = JSON.parse(localStorage.getItem("endDate")) || new Date();
+  @observable endDate = format(new Date(), "YYYY-MM-DD");
   @action
   setEndDate = d => {
     this.endDate = format(d, "YYYY-MM-DD");
-    localStorage.setItem("endDate", JSON.stringify(this.endDate));
+    // localStorage.setItem("endDate", JSON.stringify(this.endDate));
   };
   @computed
   get startDate() {
