@@ -6,21 +6,20 @@ export const Value = styled(Box)`
   font-size: .75rem;
 
   @media (max-width: 992px) {
-    font-size: .7rem;
+    font-size: .65rem;
   }
   @media (max-width: 768px) {
-    font-size: .6rem;
+    font-size: .4rem;
+    color: red;
   }
-  @media (max-width: 319px) {
-    font-size: .5rem;
-  }
+
 
 `;
 export const Info = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: .65rem;
+  font-size: .75rem;
   ${"" /* height: 20px; */}
   color: white;
   border-radius: 5px;
@@ -30,14 +29,12 @@ export const Info = styled(Box)`
   padding-bottom: 1px;
 
   @media (max-width: 992px) {
-    font-size: .6rem;
+    font-size: .65rem;
   }
   @media (max-width: 768px) {
-    font-size: .5rem;
-  }
-  @media (max-width: 319px) {
     font-size: .4rem;
   }
+
 
 `;
 

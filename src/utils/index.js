@@ -394,7 +394,6 @@ export const getData = async (
   if (days === 6) {
     acis = noonToNoon(acis);
   }
-  // acis.slice(0, 3).map(e => e.map(d => console.log(d)));
 
   // currentYear !== startDateYear means it is not this year, hence no forecast
   let results = [];
@@ -474,7 +473,6 @@ export const getData = async (
     if (days === 6) {
       sisterStationData = noonToNoon(sisterStationData);
     }
-
     // Adding to the 'day' object, sister's data
     for (const [i, day] of sisterStationData.entries()) {
       results[i]["tpSis"] = day[1];

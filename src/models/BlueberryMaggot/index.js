@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import takeRight from "lodash/takeRight";
 import format from "date-fns/format";
 import isAfter from "date-fns/is_after";
-import isToday from "date-fns/is_today";
+import isWithinRange from "date-fns/is_within_range";
 // import { CSVLink } from 'react-csv';
 
 //  reflexbox
@@ -58,7 +58,14 @@ export default class BlueberryMaggot extends Component {
     };
 
     const stage = () => {
-      if (todayCDD()) {
+      const { endDate, currentYear } = this.props.store.app;
+      const year = parseInt(currentYear, 10) + 1;
+      const sDate = `${currentYear}-10-01`;
+      const eDate = `${year}-02-28`;
+      console.log(sDate, eDate);
+      if (isWithinRange(endDate, sDate, eDate)) {
+        return [bmModel[0]];
+      } else {
         if (todayCDD() <= 613) return [bmModel[1]];
         if (todayCDD() > 613 && todayCDD() <= 863) return [bmModel[2]];
         if (todayCDD() > 863 && todayCDD() <= 963) return [bmModel[3]];
@@ -70,8 +77,7 @@ export default class BlueberryMaggot extends Component {
     const forecastText = date => {
       return (
         <Flex justify="center" align="center" column>
-          {isToday(date, endDate) && <Value>Today</Value>}
-          {!isToday(date, endDate) && <Value>{format(date, "MMM D")}</Value>}
+          <Value>{format(date, "MMM D")}</Value>
 
           {isAfter(date, endDate) &&
             <Info style={{ color: "#595959" }}>
@@ -103,7 +109,7 @@ export default class BlueberryMaggot extends Component {
             </Value>
 
             <Box style={{ color: "#108EE9" }}>
-              Emergence
+              emergence occurred
             </Box>
           </Flex>
         );
@@ -242,7 +248,7 @@ export default class BlueberryMaggot extends Component {
               </Box>
             </Flex>
 
-            <Flex mt={4} column>
+            <Flex mt={4} justify="center">
               <Box>
                 <i style={{ fontSize: "14px" }}>
                   Blueberry maggot emergence is predicted to occur when
@@ -252,7 +258,7 @@ export default class BlueberryMaggot extends Component {
               </Box>
             </Flex>
 
-            <Flex mt={1}>
+            <Flex mt={1} justify="center">
               <Box>
                 <h3>
                   Accumulated degree days (base 50°F) from 01/01/{currentYear}
@@ -264,7 +270,7 @@ export default class BlueberryMaggot extends Component {
             </Flex>
 
             <Flex justify="center" column align="center">
-              <Box mt={1} col={12} lg={8} md={8} sm={12}>
+              <Box mt={1} col={12} lg={8} md={10} sm={11}>
                 {displayPlusButton
                   ? <Table
                       bordered
@@ -291,7 +297,7 @@ export default class BlueberryMaggot extends Component {
                     />}
               </Box>
 
-              <Box mt={2} col={12} lg={8} md={8} sm={12}>
+              <Box mt={2} col={12} lg={8} md={10} sm={11}>
                 <Table
                   bordered
                   size={mobile ? "small" : "middle"}
@@ -332,7 +338,7 @@ export default class BlueberryMaggot extends Component {
               {/* </Box> */}
             </Flex>
 
-            <Flex mt={2}>
+            <Flex mt={2} mb={2}>
               <i>
                 <em style={{ color: "black" }}>
                   Disclaimer: These are theoretical predictions and forecasts.
