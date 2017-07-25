@@ -235,8 +235,8 @@ export default class BlueberryMaggot extends Component {
       <div>
         {!isLoading &&
           <Flex column mt={2} mb={2}>
-            <Flex>
-              <Box>
+            <Flex justify="center" column align="center">
+              <Box col={12} lg={8} md={10} sm={11}>
                 {!mobile
                   ? <h2>
                       <i>Blueberry Maggot</i> results for {" "}
@@ -267,7 +267,7 @@ export default class BlueberryMaggot extends Component {
               </Box>
 
               {!mobile
-                ? <Flex mt={3}>
+                ? <Flex mt={3} col={12} lg={8} md={10} sm={11}>
                     <Box>
                       <i style={{ fontSize: "14px" }}>
                         Blueberry maggot emergence is predicted to occur when
@@ -276,7 +276,7 @@ export default class BlueberryMaggot extends Component {
                       </i>
                     </Box>
                   </Flex>
-                : <Flex mt={3}>
+                : <Flex mt={3} col={12} lg={8} md={10} sm={11}>
                     <Box>
                       <i style={{ fontSize: "10px" }}>
                         Blueberry maggot emergence is predicted to occur when
@@ -287,7 +287,7 @@ export default class BlueberryMaggot extends Component {
                   </Flex>}
 
               {!mobile
-                ? <Flex mt={1} justify="center">
+                ? <Flex mt={2} col={12} lg={8} md={10} sm={11}>
                     {!isLoading
                       ? <Box>
                           <h3>
@@ -301,7 +301,7 @@ export default class BlueberryMaggot extends Component {
                         </Box>
                       : <Spin />}
                   </Flex>
-                : <Flex mt={1} justify="center">
+                : <Flex mt={2}>
                     {!isLoading
                       ? <Box style={{ fontSize: "10px" }}>
                           <h3>
