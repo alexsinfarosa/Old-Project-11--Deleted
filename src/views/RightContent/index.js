@@ -37,7 +37,7 @@ class RightContent extends Component {
               <div>NEWA</div>
             </Header>
           : <Header>
-              <div>Berry Model</div>
+              <div>Blueberry Forecast Models</div>
               <div>
                 <div style={{ textAlign: "right" }}>NEWA</div>
                 <div style={{ fontSize: ".7rem", letterSpacing: "1px" }}>

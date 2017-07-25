@@ -1,18 +1,18 @@
-import styled from 'styled-components';
-import { Box } from 'reflexbox';
-import { CSVLink } from 'react-csv';
+import styled from "styled-components";
+import { Box } from "reflexbox";
+import { CSVLink } from "react-csv";
 
 export const Value = styled(Box)`
   font-size: .75rem;
 
   @media (max-width: 992px) {
-    font-size: .6rem;
+    font-size: .75rem;
   }
   @media (max-width: 768px) {
-    font-size: .5rem;
+    font-size: .6rem;
   }
   @media (max-width: 319px) {
-    font-size: .4rem;
+    font-size: .6rem;
   }
 
 `;
@@ -33,10 +33,10 @@ export const Info = styled(Box)`
     font-size: .6rem;
   }
   @media (max-width: 768px) {
-    font-size: .5rem;
+    font-size: .6rem;
   }
   @media (max-width: 319px) {
-    font-size: .4rem;
+    font-size: .6rem;
   }
 
 `;
