@@ -17,7 +17,8 @@ class RightContent extends Component {
       areRequiredFieldsSet,
       isMap,
       toggleSidebar,
-      subject
+      subject,
+      state
     } = this.props.store.app;
     return (
       <div
@@ -31,7 +32,7 @@ class RightContent extends Component {
                   onClick={toggleSidebar}
                   style={{ marginRight: 10 }}
                 />
-                <div>Berry Model</div>
+                <div>Blueberry Forecast Models</div>
               </TextIcon>
               <div>NEWA</div>
             </Header>
@@ -46,6 +47,12 @@ class RightContent extends Component {
             </Header>}
 
         <MainContent>
+          {state.name === "All States" &&
+            <h3>
+              Click one of the icons on the map or select a state and a station
+              from the left panel.
+            </h3>}
+          <br />
           {isMap && <Map {...this.props} />}
           {areRequiredFieldsSet &&
             <div>

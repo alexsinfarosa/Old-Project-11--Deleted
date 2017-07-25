@@ -9,8 +9,7 @@ export const Value = styled(Box)`
     font-size: .65rem;
   }
   @media (max-width: 768px) {
-    font-size: .4rem;
-    color: red;
+    font-size: .60rem;
   }
 
 
@@ -32,7 +31,7 @@ export const Info = styled(Box)`
     font-size: .65rem;
   }
   @media (max-width: 768px) {
-    font-size: .4rem;
+    font-size: .60rem;
   }
 
 

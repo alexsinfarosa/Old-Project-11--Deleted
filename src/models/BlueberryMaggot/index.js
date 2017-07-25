@@ -31,6 +31,15 @@ export default class BlueberryMaggot extends Component {
     super(props);
     this.props.store.app.setCSVData();
   }
+
+  rowColor = idx => {
+    if (idx > 2) {
+      return "forecast";
+    } else {
+      return "past";
+    }
+  };
+
   render() {
     const {
       ACISData,
@@ -43,6 +52,7 @@ export default class BlueberryMaggot extends Component {
       CSVData,
       endDate,
       currentYear,
+      startDateYear,
       bmModel
     } = this.props.store.app;
     const { mobile } = this.props;
@@ -78,12 +88,12 @@ export default class BlueberryMaggot extends Component {
     const forecastText = date => {
       return (
         <Flex justify="center" align="center" column>
-          <Value>{format(date, "MMM D")}</Value>
-
-          {isAfter(date, endDate) &&
-            <Info style={{ color: "#595959" }}>
-              Forecast
-            </Info>}
+          <Value>
+            {format(date, "MMM D")}
+          </Value>
+          {startDateYear === currentYear &&
+            isAfter(date, endDate) &&
+            <Info style={{ color: "#595959" }}>Forecast</Info>}
         </Flex>
       );
     };
@@ -92,9 +102,7 @@ export default class BlueberryMaggot extends Component {
       if (record.missingDay === 1)
         return (
           <Flex justify="center" align="center">
-            <Value>
-              No data
-            </Value>
+            <Value>No data</Value>
           </Flex>
         );
       if (record.cdd > 913) {
@@ -109,9 +117,7 @@ export default class BlueberryMaggot extends Component {
               </span>
             </Value>
 
-            <Box style={{ color: "#108EE9" }}>
-              emergence occurred
-            </Box>
+            <Box style={{ fontSize: "10px" }}>emergence occurred</Box>
           </Flex>
         );
       }
@@ -137,12 +143,8 @@ export default class BlueberryMaggot extends Component {
               <Box col={12} lg={12} md={12} sm={12}>
                 {record.missingDays.length > 1
                   ? <div>
-                      No data available for the following
-                      {" "}
-                      {record.cumulativeMissingDays}
-                      {" "}
-                      dates:
-                      {" "}
+                      No data available for the following{" "}
+                      {record.cumulativeMissingDays} dates:{" "}
                     </div>
                   : <div>No data available for the following date:</div>}
               </Box>
@@ -217,13 +219,15 @@ export default class BlueberryMaggot extends Component {
         title: "Pest Status",
         className: "table",
         dataIndex: "status",
-        key: "status"
+        key: "status",
+        className: "stage"
       },
       {
         title: "Pest Management",
         className: "table",
         dataIndex: "management",
-        key: "management"
+        key: "management",
+        className: "stage"
       }
     ];
 
@@ -235,13 +239,13 @@ export default class BlueberryMaggot extends Component {
               <Box>
                 {!mobile
                   ? <h2>
-                      <i>Blueberry Maggot</i> Results for {" "}
+                      <i>Blueberry Maggot</i> results for {" "}
                       <span style={{ color: "#C44645" }}>
                         {station.name}, {state.postalCode}
                       </span>
                     </h2>
                   : <h3>
-                      <i>Blueberry Maggot</i> Results for {" "}
+                      <i>Blueberry Maggot</i> results for {" "}
                       <span style={{ color: "#C44645" }}>
                         {station.name}, {state.postalCode}
                       </span>
@@ -249,30 +253,69 @@ export default class BlueberryMaggot extends Component {
               </Box>
             </Flex>
 
-            <Flex mt={4} justify="center">
-              <Box>
-                <i style={{ fontSize: "14px" }}>
-                  Blueberry maggot emergence is predicted to occur when
-                  approximately 913 degree days, base 50 ˚F, have accumulated
-                  from January 1st.
-                </i>
-              </Box>
-            </Flex>
-
-            <Flex mt={1} justify="center">
-              {!isLoading
-                ? <Box>
-                    <h3>
-                      Accumulated degree days (base 50°F) from 01/01/{currentYear}
-                      {" "}through{" "}
-                      {format(endDate, "MM/DD/YYYY")}: {todayCDD()}
-                      <small> ({` ${missingDays()}`} days missing )</small>
-                    </h3>
-                  </Box>
-                : <Spin />}
-            </Flex>
-
             <Flex justify="center" column align="center">
+              <Box mt={3} col={12} lg={8} md={10} sm={11}>
+                <Table
+                  bordered
+                  size={mobile ? "small" : "middle"}
+                  columns={pest}
+                  rowKey={record => record}
+                  loading={ACISData.length === 0}
+                  pagination={false}
+                  dataSource={areRequiredFieldsSet ? stage() : null}
+                />
+              </Box>
+
+              {!mobile
+                ? <Flex mt={3}>
+                    <Box>
+                      <i style={{ fontSize: "14px" }}>
+                        Blueberry maggot emergence is predicted to occur when
+                        approximately 913 degree days, base 50 ˚F, have
+                        accumulated from January 1st.
+                      </i>
+                    </Box>
+                  </Flex>
+                : <Flex mt={3}>
+                    <Box>
+                      <i style={{ fontSize: "10px" }}>
+                        Blueberry maggot emergence is predicted to occur when
+                        approximately 913 degree days, base 50 ˚F, have
+                        accumulated from January 1st.
+                      </i>
+                    </Box>
+                  </Flex>}
+
+              {!mobile
+                ? <Flex mt={1} justify="center">
+                    {!isLoading
+                      ? <Box>
+                          <h3>
+                            Accumulated degree days (base 50°F) from 01/01/{startDateYear}{" "}
+                            through {format(endDate, "MM/DD/YYYY")}:{" "}
+                            <span style={{ color: "black" }}>{todayCDD()}</span>
+                            <small>
+                              {" "}({` ${missingDays()}`} days missing )
+                            </small>
+                          </h3>
+                        </Box>
+                      : <Spin />}
+                  </Flex>
+                : <Flex mt={1} justify="center">
+                    {!isLoading
+                      ? <Box style={{ fontSize: "10px" }}>
+                          <h3>
+                            Accumulated degree days (base 50°F) from 01/01/{startDateYear}{" "}
+                            through {format(endDate, "MM/DD/YYYY")}:{" "}
+                            <span style={{ color: "black" }}>{todayCDD()}</span>
+                            <small>
+                              {" "}({` ${missingDays()}`} days missing )
+                            </small>
+                          </h3>
+                        </Box>
+                      : <Spin />}
+                  </Flex>}
+
               <Box mt={1} col={12} lg={8} md={10} sm={11}>
                 {displayPlusButton
                   ? <Table
@@ -288,6 +331,7 @@ export default class BlueberryMaggot extends Component {
                       expandedRowRender={record => description(record)}
                     />
                   : <Table
+                      rowClassName={(rec, idx) => this.rowColor(idx)}
                       bordered
                       size={mobile ? "small" : "middle"}
                       columns={columns}
@@ -299,21 +343,9 @@ export default class BlueberryMaggot extends Component {
                       }
                     />}
               </Box>
-
-              <Box mt={2} col={12} lg={8} md={10} sm={11}>
-                <Table
-                  bordered
-                  size={mobile ? "small" : "middle"}
-                  columns={pest}
-                  rowKey={record => record}
-                  loading={ACISData.length === 0}
-                  pagination={false}
-                  dataSource={areRequiredFieldsSet ? stage() : null}
-                />
-              </Box>
             </Flex>
 
-            <Flex mt={2} justify="center" align="baseline">
+            <Flex mt={2} justify="space-between" align="baseline">
               {/* <Box style={{ background: "pink" }}> */}
 
               <Box>
@@ -347,12 +379,11 @@ export default class BlueberryMaggot extends Component {
                   Disclaimer: These are theoretical predictions and forecasts.
                 </em>
                 The theoretical models predicting pest development or disease
-                risk
-                use the weather data collected (or forecasted) from the weather
-                station location. These results should not be substituted for
-                actual observations of plant growth stage, pest presence, and
-                disease occurrence determined through scouting or insect
-                pheromone traps.
+                risk use the weather data collected (or forecasted) from the
+                weather station location. These results should not be
+                substituted for actual observations of plant growth stage, pest
+                presence, and disease occurrence determined through scouting or
+                insect pheromone traps.
               </i>
             </Flex>
             {isGraph && <Graph />}

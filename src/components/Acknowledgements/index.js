@@ -39,6 +39,7 @@ class Acknowledgements extends Component {
             <li>
               New York State Integrated Pest Management -{" "}
               <a
+                style={{ color: "black" }}
                 onClick={() => this.setIsVisible(false)}
                 href="https://nysipm.cornell.edu/"
                 target="_blank"
@@ -49,6 +50,7 @@ class Acknowledgements extends Component {
             <li>
               Northeast Regional Climate Center -{" "}
               <a
+                style={{ color: "black" }}
                 onClick={() => this.setIsVisible(false)}
                 href="http://www.nrcc.cornell.edu/"
                 target="_blank"
