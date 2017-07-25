@@ -345,9 +345,7 @@ export default class BlueberryMaggot extends Component {
               </Box>
             </Flex>
 
-            <Flex mt={2} justify="space-between" align="baseline">
-              {/* <Box style={{ background: "pink" }}> */}
-
+            <Flex mt={2} justify="space-around" align="baseline">
               <Box>
                 <a
                   target="_blank"
@@ -369,22 +367,22 @@ export default class BlueberryMaggot extends Component {
                   </CSVButton>
                 </Button>
               </Box>
-
-              {/* </Box> */}
             </Flex>
 
-            <Flex mt={2} mb={2}>
-              <i>
-                <em style={{ color: "black" }}>
-                  Disclaimer: These are theoretical predictions and forecasts.
-                </em>
-                The theoretical models predicting pest development or disease
-                risk use the weather data collected (or forecasted) from the
-                weather station location. These results should not be
-                substituted for actual observations of plant growth stage, pest
-                presence, and disease occurrence determined through scouting or
-                insect pheromone traps.
-              </i>
+            <Flex mt={2} mb={2} justify="center">
+              <Box mt={1} col={12} lg={8} md={10} sm={11}>
+                <i>
+                  <em style={{ color: "black" }}>
+                    Disclaimer: These are theoretical predictions and forecasts.
+                  </em>
+                  The theoretical models predicting pest development or disease
+                  risk use the weather data collected (or forecasted) from the
+                  weather station location. These results should not be
+                  substituted for actual observations of plant growth stage,
+                  pest presence, and disease occurrence determined through
+                  scouting or insect pheromone traps.
+                </i>
+              </Box>
             </Flex>
             {isGraph && <Graph />}
           </Flex>}
