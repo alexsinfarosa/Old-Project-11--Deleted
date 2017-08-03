@@ -20,6 +20,7 @@ class RightContent extends Component {
       subject,
       state
     } = this.props.store.app;
+    console.log(subject.name);
     return (
       <div
         style={{ display: "flex", flexDirection: "column", height: "100vh" }}
@@ -32,12 +33,16 @@ class RightContent extends Component {
                   onClick={toggleSidebar}
                   style={{ marginRight: 10 }}
                 />
-                <div>Blueberry Forecast Models</div>
+                <div>
+                  {subject.name} Forecast Models
+                </div>
               </TextIcon>
               <div>NEWA</div>
             </Header>
           : <Header>
-              <div>Blueberry Forecast Models</div>
+              <div>
+                {subject.name} Forecast Models
+              </div>
               <div>
                 <div style={{ textAlign: "right" }}>NEWA</div>
                 <div style={{ fontSize: ".7rem", letterSpacing: "1px" }}>
